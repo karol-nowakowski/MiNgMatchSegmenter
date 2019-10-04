@@ -10,14 +10,10 @@ Copyright (c) 2019 by Karol Nowakowski
 
 
 import argparse
-import os.path as op
-import glob
-import re
 import io
 import math
 
-import time # for measuring execution time
-
+import time  # for measuring execution time
 
 
 class Model(object):
@@ -84,12 +80,12 @@ class Segmenter(object):
 	
 	def __init__(self, model, max):
 		self.model = model
-		self.limit = max # limit of n-grams per input string
+		self.limit = max  # limit of n-grams per input string
 		self.processor = Processor(to_lowercase = True)
 	
 	
 	def find_candidates(self, text):
-		candidates = [] # candidate segmentations
+		candidates = []  # candidate segmentations
 		# 2 dicts for memoization; keys represent the remaining parts of text, yet to be segmented
 		partial_segmentations = {text:[]}
 		current_step_partial = {text:[]}
@@ -172,11 +168,11 @@ class Segmenter(object):
 class Processor(object):
 	
 	def __init__(self, to_lowercase = False):
-		self.to_lowercase = to_lowercase # if set to true, all strings will be converted to lowercase
+		self.to_lowercase = to_lowercase  # if set to true, all strings will be converted to lowercase
 		self.transformation_rules = {}
 		#self.punc = [',', '"', '\'', '?', '!', ':', ';', '/']
-		self.punc_left = ['"', '\'', '(', '['] # punctuation marks that stand before a word
-		self.punc_right = ['.', ',', '"', '\'', '?', '!', ':', ';', '/', ')', ']'] # punctuation marks that stand after a word
+		self.punc_left = ['"', '\'', '(', '[']  # punctuation marks that stand before a word
+		self.punc_right = ['.', ',', '"', '\'', '?', '!', ':', ';', '/', ')', ']']  # punctuation marks that stand after a word
 		# The following punctuation marks are expected to appear in pairs.
 		# Such symbol shall not be separated from a token if its pair stands
 		# in the middle of that token (abc [de] -> abc [ de ], but abc[de] -> abc[de]).
@@ -202,8 +198,8 @@ class Processor(object):
 		tokens_in = string.split()
 		tokens_out = []
 		for t in tokens_in:
-			punc_left = [] # for punctuation marks standing before the word
-			punc_right = [] # for punctuation marks standing after the word
+			punc_left = []  # for punctuation marks standing before the word
+			punc_right = []  # for punctuation marks standing after the word
 			while len(t) > 1 and t[0] in self.punc_left:
 				punc_left.append(t[0])
 				t = t[1:]
@@ -260,11 +256,11 @@ def initialize():
 
 
 def read_lines(filename):
-	with open(filename, 'r', encoding='utf-8') as file:
+	with io.open(filename, 'r', encoding='utf-8') as file:
 		return [line.strip() for line in file]
 
 def write_to_file(output, filename):
-	with open(filename, 'w', encoding='utf-8') as out_file:
+	with io.open(filename, 'w', encoding='utf-8') as out_file:
 		for line in output:
 			out_file.write(line + "\n")
 
